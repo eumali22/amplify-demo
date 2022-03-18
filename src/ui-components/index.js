@@ -4,5 +4,4 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
-export { default as Post } from "./Post";
-export { default as PostCollectionTest } from "./PostCollectionTest";
+export { default as PostRead } from "./PostRead";
