@@ -6,8 +6,10 @@
 
 import React from "react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { ViewProps } from "@aws-amplify/ui-react";
-export declare type HeroLayout2Props = React.PropsWithChildren<Partial<ViewProps> & {
+import { CollectionProps } from "@aws-amplify/ui-react";
+export declare type PostCollectionTestProps = React.PropsWithChildren<Partial<CollectionProps<any>> & {
+    items?: any[];
+} & {
     overrides?: EscapeHatchProps | undefined | null;
 }>;
-export default function HeroLayout2(props: HeroLayout2Props): React.ReactElement;
+export default function PostCollectionTest(props: PostCollectionTestProps): React.ReactElement;

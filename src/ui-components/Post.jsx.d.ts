@@ -5,9 +5,12 @@
  **************************************************************************/
 
 import React from "react";
+import { Post } from "../models";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { FlexProps } from "@aws-amplify/ui-react";
 export declare type PostProps = React.PropsWithChildren<Partial<FlexProps> & {
+    post?: Post;
+} & {
     overrides?: EscapeHatchProps | undefined | null;
 }>;
 export default function Post(props: PostProps): React.ReactElement;

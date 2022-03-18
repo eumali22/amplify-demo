@@ -9,7 +9,7 @@ import React from "react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Flex, Text, View } from "@aws-amplify/ui-react";
 export default function Post(props) {
-  const { overrides: overridesProp, ...rest } = props;
+  const { post, overrides: overridesProp, ...rest } = props;
   const overrides = { ...overridesProp };
   return (
     <Flex
@@ -41,7 +41,7 @@ export default function Post(props) {
         position="relative"
         padding="0px 0px 0px 0px"
         whiteSpace="pre-wrap"
-        children="Post Title"
+        children={post?.title}
         {...getOverrideProps(overrides, "Flex.Text[0]")}
       ></Text>
       <View
@@ -70,7 +70,7 @@ export default function Post(props) {
           left="0px"
           padding="0px 0px 0px 0px"
           whiteSpace="pre-wrap"
-          children="Content"
+          children={post?.content}
           {...getOverrideProps(overrides, "Flex.View[0].Text[0]")}
         ></Text>
       </View>
