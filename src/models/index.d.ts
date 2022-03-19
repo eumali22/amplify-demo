@@ -12,6 +12,7 @@ export declare class Post {
   readonly id: string;
   readonly title?: string;
   readonly content?: string;
+  readonly owner?: string;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<Post, PostMetaData>);

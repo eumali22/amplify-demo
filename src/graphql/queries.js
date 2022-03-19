@@ -7,6 +7,7 @@ export const getPost = /* GraphQL */ `
       id
       title
       content
+      owner
       createdAt
       updatedAt
       _version
@@ -26,6 +27,7 @@ export const listPosts = /* GraphQL */ `
         id
         title
         content
+        owner
         createdAt
         updatedAt
         _version
@@ -54,6 +56,7 @@ export const syncPosts = /* GraphQL */ `
         id
         title
         content
+        owner
         createdAt
         updatedAt
         _version
