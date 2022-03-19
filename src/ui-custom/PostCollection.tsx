@@ -3,7 +3,7 @@ import * as queries from '../graphql/queries';
 import { API, DataStore } from 'aws-amplify';
 import { GraphQLResult } from '@aws-amplify/api-graphql';
 import { Post } from '../models/index';
-import PostRead from '../ui-components/PostRead'
+import PostWrapper from "./PostWrapper";
 
 const fetchPosts = async (): Promise<[object[], string]> => {
     const result = await API.graphql({
@@ -16,6 +16,7 @@ const fetchPosts = async (): Promise<[object[], string]> => {
 
 const fetchPosts2 = async (): Promise<[object[], string]> => {
     try {
+        await DataStore.clear();
         await DataStore.start();
         const posts = await DataStore.query(Post);
         // console.log("Posts retrieved successfully!", JSON.stringify(posts, null, 2));
@@ -50,7 +51,7 @@ export class PostCollection extends React.Component<{}, { posts: object[], nextT
         const { posts } = this.state;
         if (!posts) return "loading...";
         return posts.map((item, idx) => {
-            return (<PostRead key={idx} post={item} />);
+            return (<PostWrapper mode="read" key={idx} item={new Post(item)} />);
         });
     }
 }
