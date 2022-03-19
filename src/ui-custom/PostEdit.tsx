@@ -1,8 +1,5 @@
 import { Button, Flex, TextAreaField, TextField } from "@aws-amplify/ui-react";
-import { DataStore } from "aws-amplify";
 import { Post } from "../models";
-
-type posteditfn = (a: keyof Post, b: string) => void;
 
 export type PostEditProps = {
     post?: Post,

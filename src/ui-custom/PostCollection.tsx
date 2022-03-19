@@ -14,12 +14,14 @@ const fetchPosts = async (): Promise<[object[], string]> => {
     return [items, nextToken];
 }
 
+const initDataStore = async () => {
+    await DataStore.start();
+}
+
 const fetchPosts2 = async (): Promise<[object[], string]> => {
     try {
-        await DataStore.clear();
-        await DataStore.start();
         const posts = await DataStore.query(Post);
-        // console.log("Posts retrieved successfully!", JSON.stringify(posts, null, 2));
+        console.log("Posts retrieved successfully!", JSON.stringify(posts, null, 2));
         return [posts, ""];
     } catch (error) {
         console.log("Error retrieving posts", error);
@@ -37,7 +39,7 @@ export class PostCollection extends React.Component<{}, { posts: object[], nextT
     }
 
     componentDidMount() {
-        // fetchPosts()
+        initDataStore();
         fetchPosts2()
           .then(([items, nextToken]) => {
             this.setState({
@@ -51,7 +53,7 @@ export class PostCollection extends React.Component<{}, { posts: object[], nextT
         const { posts } = this.state;
         if (!posts) return "loading...";
         return posts.map((item, idx) => {
-            return (<PostWrapper mode="read" key={idx} item={new Post(item)} />);
+            return (<PostWrapper mode="read" key={idx} item={item as Post} />);
         });
     }
 }

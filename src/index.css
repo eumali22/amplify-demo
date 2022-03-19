@@ -16,3 +16,18 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+section#profile {
+    display: flex;
+    height: 50px;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.btn-sout {
+    display: block;    
+}
+
+main {
+    display: flex;
+}

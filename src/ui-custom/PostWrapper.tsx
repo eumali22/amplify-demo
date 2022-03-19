@@ -1,19 +1,25 @@
-import { PostRead } from "../ui-components";
 import { Post as PostModel } from "../models";
 import { ItemMode } from "./common.types";
 import PostEdit from "./PostEdit";
 import React from "react";
 import { DataStore } from "aws-amplify";
+import PostRead from "./PostRead";
+import ActionButtons from "./ActionButtons";
+
 
 export type PostWrapperProps = { mode: ItemMode, item?: PostModel };
 
+/**
+ * Post model state lives here
+ */
 export default class PostWrapper extends React.Component<PostWrapperProps, PostWrapperProps> {
     constructor(props: PostWrapperProps) {
         super(props);
 
         this.handleFieldChange = this.handleFieldChange.bind(this);
         this.handleSave = this.handleSave.bind(this);
-        // this.
+        this.handleEdit = this.handleEdit.bind(this);
+        
         this.state = {
             mode: props.mode,
             item: props.item || new PostModel({})
@@ -36,8 +42,13 @@ export default class PostWrapper extends React.Component<PostWrapperProps, PostW
     async handleSave() {
         const newPost = await DataStore.save(this.state.item as PostModel);
         this.setState({
-            item: new PostModel({})
+            mode: "read",
+            item: newPost
         })
+    }
+
+    handleEdit() {
+        this.setState({ mode: "edit" });
     }
 
     renderPostEdit() {
@@ -52,10 +63,19 @@ export default class PostWrapper extends React.Component<PostWrapperProps, PostW
     }
 
     render() {
+        const postComponent = this.state.mode === "edit"
+            ? this.renderPostEdit()
+            : <PostRead post={this.state.item} />
+
         return (
-            this.state.mode === "edit"
-                ? this.renderPostEdit()
-                : <PostRead post={this.state.item} />
+            <>
+                <ActionButtons 
+                    mode={this.state.mode}
+                    onEdit={this.handleEdit}
+                    onSave={this.handleSave}
+                />
+                { postComponent }
+            </>
         );
     }
 }

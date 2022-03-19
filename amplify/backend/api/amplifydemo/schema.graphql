@@ -2,7 +2,8 @@ type Post
   @model
   @auth(
     rules: [
-      { allow: owner }
+      { allow: owner, operations: [create, update, delete] }
+      { allow: private, operations: [read, update] }
     ]
   ) {
   id: ID!
