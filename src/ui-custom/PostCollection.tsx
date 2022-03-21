@@ -3,7 +3,7 @@ import { DataStore, Hub, Predicates, SortDirection } from 'aws-amplify';
 import { Post } from '../models/index';
 import PostComponent from "./PostComponent";
 
-export function PCollection() {
+export function PostCollection() {
     const [newPost, setNewPost] = useState<Post>(new Post({title: "", content: ""}));
     const [posts, setPosts] = useState<Post[]>([]);
     

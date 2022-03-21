@@ -2,7 +2,7 @@ import { Amplify, DataStore } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import awsExports from './aws-exports';
 import '@aws-amplify/ui-react/styles.css';
-import { PCollection } from './ui-custom/PostCollection';
+import { PostCollection } from './ui-custom/PostCollection';
 import MenuBar from './ui-custom/MenuBar';
 import { Hub } from '@aws-amplify/core';
 
@@ -24,7 +24,7 @@ export default function App() {
                             userName={user.username}
                             userEmail={user.attributes?.email}
                         />
-                        <PCollection />
+                        <PostCollection />
                     </>
                 )
             }}
