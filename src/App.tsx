@@ -9,6 +9,7 @@ import { Hub } from '@aws-amplify/core';
 
 Amplify.configure(awsExports);
 
+console.log("Listening to all datastore events...");
 Hub.listen("datastore", (data) => {
     console.log('A new event has happened:', data);
 })

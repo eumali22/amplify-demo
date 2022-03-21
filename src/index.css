@@ -1,6 +1,10 @@
 :root {
     --menu-bg: rgb(1, 1, 39);
     --menu-text: rgb(180, 180, 180);
+    --post-width-large: 700px;
+    --post-width-medium: 500px;
+    --post-width-small: 400px;
+    --post-width-xs: 300px;
 }
 
 @font-face {
@@ -102,15 +106,57 @@ main {
 }
 
 main > h1 {
-    width: 300px;
+    padding: 4px;
+    width: var(--post-width-large);
     font-size: large;
 }
 
 .post {
     background-color: aqua;
-    width: 300px;
+    width: var(--post-width-large);
     padding: 8px;
     border-bottom: 1px solid grey;
+}
+
+@media only screen and (max-width: 730px) {
+    main > h1 {
+        width: var(--post-width-medium);
+    }
+    .post {
+        width: var(--post-width-medium);
+    }
+}
+
+@media only screen and (max-width: 530px) {
+    body {
+        font-size: small;
+    }
+    main > h1 {
+        width: var(--post-width-small);
+        font-size: medium;
+    }
+    .post h2, .post h3 {
+        font-size: small;
+    }
+    .post {
+        width: var(--post-width-small);
+    }
+}
+
+@media only screen and (max-width: 375px) {
+    body {
+        font-size: x-small;
+    }
+    main > h1 {
+        width: var(--post-width-xs);
+        font-size: small;
+    }
+    .post h2, .post h3 {
+        font-size: x-small;
+    }
+    .post {
+        width: var(--post-width-xs);
+    }
 }
 
 .post h2, .post h3 {

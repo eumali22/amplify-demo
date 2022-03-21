@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { DataStore, Hub, Predicates, SortDirection } from 'aws-amplify';
 import { Post } from '../models/index';
 import PostComponent from "./PostComponent";
@@ -46,69 +46,43 @@ export function PostCollection() {
         }
     }
 
+    const fetchData = async () => {
+        try {
+            const posts = await DataStore.query(Post, Predicates.ALL, {
+                sort: s => s.updatedAt(SortDirection.DESCENDING)
+            });
+            console.log("Retrieved posts.")
+            setPosts(posts);
+        } catch (error) {
+            console.log("Error retrieving posts: ", error);
+        }
+    }
+
     useEffect(() => {
-        console.log("DataStore.start()");
         const startDataStore = async () => {
             await DataStore.start();
         }
         startDataStore();
+        fetchData();
     }, []);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const posts = await DataStore.query(Post, Predicates.ALL, {
-                    sort: s => s.updatedAt(SortDirection.DESCENDING)
-                });
-                console.log("Posts retrieved successfully!");
-                setPosts(posts);
-            } catch (error) {
-                console.log("Error retrieving posts: ", error);
-            }
-        }
-
-        // Create listener
         const listener = Hub.listen("datastore", async hubData => {
             const { event } = hubData.payload;
             if (event === "ready") {
-                console.log("READDYYY");
                 fetchData();
             }
         });
-        console.log("ATTACHING READY LISTENER");
-
-        // // Remove listener
-        return () => {
-            console.log("REMOVING READY LISTENER");
-            listener();
-        }
+        return () => { listener(); }
 
     }, [posts]);
     
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const posts = await DataStore.query(Post, Predicates.ALL, {
-                    sort: s => s.updatedAt(SortDirection.DESCENDING)
-                });
-                console.log("Posts retrieved successfully!");
-                setPosts(posts);
-            } catch (error) {
-                console.log("Error retrieving posts: ", error);
-            }
-        }
-
         const subscription = DataStore.observe(Post).subscribe(msg => {
             fetchData();
-            // console.log(msg.model, msg.opType, msg.element);
         });
-        console.log("ATTACHING POST LISTENER");
-
-        return () => {
-            console.log("REMOVING POST LISTENER");
-            subscription.unsubscribe();
-        }
-    });
+        return () => { subscription.unsubscribe(); }
+    }, [posts]);
 
     return (
         <main>
