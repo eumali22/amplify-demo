@@ -2,51 +2,45 @@ import { Amplify, DataStore } from 'aws-amplify';
 import { Authenticator } from '@aws-amplify/ui-react';
 import awsExports from './aws-exports';
 import '@aws-amplify/ui-react/styles.css';
-import { PostCollection } from './ui-custom/PostCollection';
+import { PCollection, PostCollection } from './ui-custom/PostCollection';
 import { Post } from './models';
 import MenuBar from './ui-custom/MenuBar';
+import { Hub } from '@aws-amplify/core';
+
+
 Amplify.configure(awsExports);
 
+Hub.listen("datastore", (data) => {
+    console.log('A new event has happened:', data);
+})
+
 export default function App() {
-    // return (
-    //     <>
-    //     <section id="profile">
-    //         <Authenticator>
-    //             {({ signOut, user }) => (
-    //                 <>
-    //                     <h5>UserID: {user.username}</h5>
-    //                     <button className="btn-sout" onClick={() => logOut(signOut)}>Sign out</button>
-    //                 </>
-    //             )}
-    //         </Authenticator>
-    //     </section>
-    //     <main>
-    //         <PostCollection />
-    //     </main>
-    //     </>
-    // );
 
     return (
         <Authenticator>
             {({ signOut, user }) => (
                 <>
-                    <MenuBar signOut={signOut}/>
-                    <main>
-                        <p>hi there this is some sample text. and more words are coming. aljadf ubiaolall jasf,</p>
-                        <p>lorem ipsum dolor sit amet hallelujah</p>
-                        <p>hi there this is some sample text. and more words are coming. aljadf ubiaolall jasf,</p>
-                        <p>lorem ipsum dolor sit amet hallelujah</p>
-                        <p>hi there this is some sample text. and more words are coming. aljadf ubiaolall jasf,</p>
-                        <p>lorem ipsum dolor sit amet hallelujah</p>
-                        <p>hi there this is some sample text. and more words are coming. aljadf ubiaolall jasf,</p>
-                        <p>lorem ipsum dolor sit amet hallelujah</p>
-                        <p>hi there this is some sample text. and more words are coming. aljadf ubiaolall jasf,</p>
-                        <p>lorem ipsum dolor sit amet hallelujah</p>
-                        <p>hi there this is some sample text. and more words are coming. aljadf ubiaolall jasf,</p>
-                        <p>lorem ipsum dolor sit amet hallelujah</p>
-                        <p>hi there this is some sample text. and more words are coming. aljadf ubiaolall jasf,</p>
-                        <p>lorem ipsum dolor sit amet hallelujah</p>
-                    </main>
+                    <MenuBar signOut={()=>logOut(signOut)}/>
+                    {/* <main className='all-posts'>
+                        <h1>All Posts</h1>
+                        <article className='post'>
+                            <h2>UserID (post owner)</h2>
+                            Hello there asdfas f
+                        </article>
+                        <article className='post'>
+                            <h2>UserID (post owner)</h2>
+                            Hiii Hello thereasdfaafa 
+                        </article>
+                        <article className='post'>
+                            <h2>UserID (post owner)</h2>
+                            Hello there asd a 
+                        </article>
+                        <article className='post'>
+                            <h2>UserID (post owner)</h2>
+                            Helasd fasdf alo thereas  asfasd
+                        </article>
+                    </main> */}
+                    <PCollection />
                 </>
             )}
         </Authenticator>

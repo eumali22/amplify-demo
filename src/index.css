@@ -3,6 +3,10 @@
   src: url(Inter-Regular.ttf);
 }
 
+:root {
+    --post-width: 600px;
+}
+
 body {
   margin: 0;
   font-family: Inter;
@@ -24,11 +28,6 @@ section#profile {
 
 .btn-sout {
     display: block;    
-}
-
-
-main {
-    margin-top: 50px;
 }
 
 nav {
@@ -90,4 +89,38 @@ nav .dropdown-content {
 nav .dropdown-content > ul {
     display: flex;
     flex-direction: column;
+}
+
+main {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+main > h1 {
+    width: 600px;
+    font-size: large;
+}
+
+.post {
+    background-color: aqua;
+    width: 600px;
+    padding: 8px;
+    border-bottom: 1px solid grey;
+}
+
+.post h2, .post h3 {
+    font-size: medium;
+    margin: 4px 0px;
+}
+
+.fld-title {
+    display: block;
+    width: 100%;
+}
+
+.fld-content {
+    display: block;
+    width: 100%;
 }
