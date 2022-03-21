@@ -1,89 +1,44 @@
 import React, { useEffect, useState } from "react";
-import * as queries from '../graphql/queries';
-import { API, DataStore, Hub, Predicates, SortDirection } from 'aws-amplify';
-import { GraphQLResult } from '@aws-amplify/api-graphql';
+import { DataStore, Hub, Predicates, SortDirection } from 'aws-amplify';
 import { Post } from '../models/index';
-import PostWrapper from "./PostWrapper";
 import PostComponent from "./PostComponent";
 
-const fetchPosts = async (): Promise<[object[], string]> => {
-    const result = await API.graphql({
-        query: queries.listPosts,
-        variables: { limit: 6 }
-    });
-    const { data: { listPosts: { items, nextToken } } } = result as GraphQLResult<any>;
-    return [items, nextToken];
-}
-
-const initDataStore = async () => {
-    await DataStore.start();
-}
-
-const fetchPosts2 = async (): Promise<[object[], string]> => {
-    try {
-        const posts = await DataStore.query(Post);
-        console.log("Posts retrieved successfully!", JSON.stringify(posts, null, 2));
-        return [posts, ""];
-    } catch (error) {
-        console.log("Error retrieving posts", error);
-        return [[], ""];
-    }
-}
-
-export class PostCollection extends React.Component<{}, { posts: object[], nextToken: string }> {
-    constructor(props: any) {
-        super(props);
-        this.state = {
-            posts: [],
-            nextToken: "",
-        }
-    }
-
-    componentDidMount() {
-        initDataStore();
-        fetchPosts2()
-          .then(([items, nextToken]) => {
-            this.setState({
-              posts: items,
-              nextToken: nextToken
-            });
-          })
-    }
-
-    render() {
-        const { posts } = this.state;
-        if (!posts) return "loading...";
-        return posts.map((item, idx) => {
-            return (<PostWrapper mode="read" key={idx} item={item as Post} />);
-        });
-    }
-}
-
 export function PCollection() {
-    const [newPost, setNewPost] = useState<Post>(new Post({}));
+    const [newPost, setNewPost] = useState<Post>(new Post({title: "", content: ""}));
     const [posts, setPosts] = useState<Post[]>([]);
     
-    function handleFieldChange(key: number, prop: keyof Post, newValue: string, post?: Post) {
+    function handleFieldChange(key: number, prop: keyof Post, newValue: string, post: Post) {
         if (!post) {
-            post = new Post({});
+            post = new Post({ title: "", content: ""});
         }
-        const updatedPost = Post.copyOf(post!, updated => {
-            updated.title = prop === "title" ? newValue : post!.title;
-            updated.content = prop === "content" ? newValue : post!.content;
+        const updatedPost = Post.copyOf(post, updated => {
+            updated.title = prop === "title" ? newValue : post.title;
+            updated.content = prop === "content" ? newValue : post.content;
         });
-        const newPostsArr = [...posts];
+        
         if (key === -1) {
             setNewPost(updatedPost);
         } else {
+            const newPostsArr = [...posts];
             newPostsArr[key] = updatedPost;
             setPosts(newPostsArr);
         }
     }
 
     async function handleSave(post: Post) {
+        // validate fields first
+        if (!post.title || post.title.trim() === "") {
+            alert("Please provide title!");
+            return false;
+        }
+        if (!post.content || post.content.trim() === "") {
+            alert("Please provide content!");
+            return false;
+        }
+
         try {
-            const savedPost = await DataStore.save(post);
-            if (post == newPost) {
+            await DataStore.save(post);
+            if (post === newPost) {
                 setNewPost(new Post({ title: "", content: "" }));
             }
         } catch (e) {
@@ -114,9 +69,8 @@ export function PCollection() {
 
         // Create listener
         const listener = Hub.listen("datastore", async hubData => {
-            const { event, data } = hubData.payload;
+            const { event } = hubData.payload;
             if (event === "ready") {
-                // do something here once the data is synced from the cloud
                 console.log("READDYYY");
                 fetchData();
             }
@@ -146,7 +100,7 @@ export function PCollection() {
 
         const subscription = DataStore.observe(Post).subscribe(msg => {
             fetchData();
-            console.log(msg.model, msg.opType, msg.element);
+            // console.log(msg.model, msg.opType, msg.element);
         });
         console.log("ATTACHING POST LISTENER");
 

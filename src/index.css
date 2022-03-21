@@ -1,10 +1,11 @@
+:root {
+    --menu-bg: rgb(1, 1, 39);
+    --menu-text: rgb(180, 180, 180);
+}
+
 @font-face {
   font-family: Inter;
   src: url(Inter-Regular.ttf);
-}
-
-:root {
-    --post-width: 600px;
 }
 
 body {
@@ -26,13 +27,9 @@ section#profile {
     justify-content: flex-end;
 }
 
-.btn-sout {
-    display: block;    
-}
-
 nav {
-    background-color: rgb(1, 1, 39);
-    color: rgb(180, 180, 180);
+    background-color: var(--menu-bg);
+    color: var(--menu-text);
     position: fixed;
     top: 0;
     width: 100%;
@@ -68,6 +65,11 @@ nav ul li {
     padding: 5px;
     box-sizing: border-box;
     display: block;
+    
+}
+
+nav li:hover {
+    color: white;
 }
 
 nav .dropdown {
@@ -78,7 +80,8 @@ nav .dropdown {
 
 nav .dropdown-content {
   position: absolute;
-  background-color: rgb(1, 1, 39);
+  background-color: var(--menu-bg);
+  color: var(--menu-text);
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
@@ -99,13 +102,13 @@ main {
 }
 
 main > h1 {
-    width: 600px;
+    width: 300px;
     font-size: large;
 }
 
 .post {
     background-color: aqua;
-    width: 600px;
+    width: 300px;
     padding: 8px;
     border-bottom: 1px solid grey;
 }

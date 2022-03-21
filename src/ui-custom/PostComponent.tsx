@@ -1,4 +1,3 @@
-import { DataStore } from "aws-amplify";
 import { useState } from "react";
 import { Post } from "../models";
 import { ItemMode } from "./common.types";
@@ -7,7 +6,7 @@ type PostComponentProps = {
     idKey: number,
     post: Post,
     mode: ItemMode,
-    onFieldChange: (key: number, b: keyof Post, c: string, a?: Post) => void,
+    onFieldChange: (key: number, b: keyof Post, c: string, a: Post) => void,
     onSave: (post: Post) => void
 }
 
@@ -21,18 +20,22 @@ function PostComponent(props: PostComponentProps) {
 
     return (
         mode === "read"
-            ? <PostRead handleDblClick={() => setMode("edit")} post={props.post}></PostRead>
+            ? <PostRead onDblClick={() => setMode("edit")} post={props.post}></PostRead>
             : <PostEdit idKey={props.idKey} onSave={handleSave} onFieldChange={props.onFieldChange} post={props.post}></PostEdit>
-        
     );
 }
 
-function PostRead(props: { post?: Post, handleDblClick: ()=>void }) {
+type PostReadProps = {
+    post: Post,
+    onDblClick: () => void,
+}
+
+function PostRead(props: PostReadProps) {
     return (
         props.post
         ? <article className='post'>
             <h2>User {props.post.owner} says:</h2>
-            <article onDoubleClick={props.handleDblClick}>
+                <article onDoubleClick={props.onDblClick}>
                 <h3>{props.post.title}</h3>
                 <p>{props.post.content}</p>
             </article>
@@ -53,20 +56,19 @@ function PostEdit(props: PostEditProps) {
         props.onFieldChange(idKey, prop, newVal, post);
     }
 
-    async function handleSave() {
+    function handleSave() {
         props.onSave(props.post);
     }
 
-    const userText = props.post.createdAt ? <h2>User {props.post.owner} says:</h2> : "Write new post:";
     return (
         <article className='post'>
-            {userText}
+            {<h2>Write new post:</h2>}
             <article>
                 <input
                     className="fld-title"
                     type="text"
                     value={props.post.title}
-                    onChange={(e: any) => handleChange(props.idKey,"title", e.target.value, props.post)}
+                    onChange={(e: any) => handleChange(props.idKey, "title", e.target.value, props.post)}
                 />
                 <textarea
                     className="fld-content"
@@ -80,7 +82,5 @@ function PostEdit(props: PostEditProps) {
         </article>
     );
 }
-
-
 
 export default PostComponent;
